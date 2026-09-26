@@ -23,14 +23,12 @@
 | `src/pages/` | 路由。中文在根下（`index.astro`、`towns/index.astro`…），英文在 `en/` 下的对称路径 |
 | `src/pages/[dir]/[slug].astro` | 条目详情页，路径由内容库的目录名与 ID 尾段决定 |
 | `src/pages/sitemap.xml.js` | 站点地图，构建时从内容库枚举路由，中英同页互标 hreflang |
-| `src/views/` | 页面正文：首页、列表、详情、索引、关于、404（**无时间轴**） |
-| `src/layouts/Base.astro` | 站点外壳：把站点常量、界面串、导航交给 kit 的 `Layout` |
+| `src/views/` | 页面正文：首页、列表、详情、索引、关于（**无时间轴**）。页面外壳 `Base` 与 404 视图在 kit |
 | `src/site/config.mjs` | 本站常量、六个类别、三个板块、板块说明、编纂凡例、列表页每页条数 |
 | `src/site/content.mjs` | 读内容库并套上本站规则（六类归类、所属镇街、传统村落批次） |
 | `src/site/context.mjs` | 渲染上下文，由 kit 的 `makeContext` 生成，页面共用 |
 | `src/i18n/ui.zh.json`、`ui.en.json` | 界面串。英文用 `: `、中文用 `：`（`labelSep`） |
 | `public/` | 原样拷贝进产物的静态件：`CNAME`、`robots.txt`、`.nojekyll`、`assets/img/` |
-| `scripts/` | 本站的检查入口，实现都在 kit |
 
 ## 命令
 

@@ -13,24 +13,25 @@ import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadContent, forLang } from 'lishui-kit';
 import { entryPath } from 'lishui-kit/i18n/paths.mjs';
-import { SITE, CATEGORIES, TYPE_DIRS, VILLAGE_LEVEL, CN_NUM } from './config.mjs';
+import { SITE, CATEGORIES, VILLAGE_LEVEL, CN_NUM } from './config.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const SITE_ROOT = resolve(HERE, '..', '..');
 
-/** 内容库位置：环境变量优先，其次站点库内的 content/ 子模块，最后同级目录。 */
+/** 内容库位置：环境变量优先，其次站点库内的 content/ 子模块，最后同级目录。
+    探测标志是内容库的站点登记 schema/sites.json——合库后它才是内容库的标志文件。 */
 export function resolveContentDir() {
   const candidates = [
     process.env.LISHUI_CONTENT_DIR,
     join(SITE_ROOT, 'content'),
-    resolve(SITE_ROOT, '..', 'lishui-towns'),
+    resolve(SITE_ROOT, '..', 'lishui'),
   ].filter(Boolean);
   for (const dir of candidates) {
-    if (existsSync(join(dir, 'schema', 'enums.json'))) return dir;
+    if (existsSync(join(dir, 'schema', 'sites.json'))) return dir;
   }
   throw new Error(
     '找不到内容库。请设置 LISHUI_CONTENT_DIR，或在站点库内放置 content/ 子模块，'
-    + '或把 lishui-towns 放在同级目录。',
+    + '或把 lishui 内容库放在同级目录。',
   );
 }
 
@@ -86,7 +87,7 @@ let cached = null;
 export function siteContent() {
   if (cached) return cached;
 
-  const content = loadContent({ contentDir: resolveContentDir(), typeDirs: TYPE_DIRS });
+  const content = loadContent({ contentDir: resolveContentDir(), siteId: SITE.id });
   for (const entry of content.entries) {
     entry.category = deriveCategory(entry);
     entry.path = entryPath(entry);
