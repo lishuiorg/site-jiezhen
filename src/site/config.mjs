@@ -3,6 +3,9 @@
  * 六个类别、三个板块、板块说明与编纂凡例都只属于街镇，放在站点层；
  * kit 只提供通用的设计系统、组件与译法，不认这套分类。
  *
+ * ARCHIVE 与 LIST_PAGE_SIZE 三站一致，改为从 lishui-kit/site-defaults.mjs
+ * 再导出；RULES 本站自写（见文件末尾），不用底座默认值。
+ *
  * 与历史、文化两站最大的不同：本站没有时间轴。行政区划的年代多数只到
  * 「宋代」「明代」这一档，硬上时间轴会得到一根大部分为空的轴；
  * 时间信息改放进正文的「沿革」一节，筛选维度改用单元类型与所属镇街。
@@ -20,11 +23,8 @@ export const SITE = {
   contentUpdated: '',
 };
 
-/** 实体目录 → 实体类型；镇街与村落分处两个目录，共用 place 这一类型。 */
-export const TYPE_DIRS = { towns: 'place', villages: 'place', articles: 'article' };
-
-/** 列表页每页条数：卡片网格按 300px 起排，24 条正好是 4 列 × 6 行。 */
-export const LIST_PAGE_SIZE = 24;
+/** 列表页每页条数：三站一致，取自底座。 */
+export { LIST_PAGE_SIZE } from 'lishui-kit/site-defaults.mjs';
 
 /* ---------- 六个类别 ---------- */
 
@@ -155,25 +155,13 @@ export const CN_NUM = ['', '一', '二', '三', '四', '五', '六', '七', '八
 
 /* ---------- 来源层归档方式 ---------- */
 
-export const ARCHIVE = {
-  zh: {
-    fulltext: '全文或影印本归档',
-    'link-registered': '登记链接（有在线版本）',
-    'catalogued-only': '仅著录（未见在线版本）',
-    excerpt: '摘录卡（只记必要片段）',
-    link: '链接档案（政府页与名录）',
-  },
-  en: {
-    fulltext: 'Full text or scan archived',
-    'link-registered': 'Link registered (online copy exists)',
-    'catalogued-only': 'Catalogued only (no online copy seen)',
-    excerpt: 'Excerpt card (essential passages only)',
-    link: 'Link record (government pages and lists)',
-  },
-};
+/* 三站一致，取自底座。 */
+export { ARCHIVE } from 'lishui-kit/site-defaults.mjs';
 
 /* ---------- 编纂凡例（首页） ---------- */
 
+/* 本站自写，不用底座默认值：第 2、3 条按官方文件口径表述
+   （名单与数字照录、两个官方数并列），与历史／文化两站的旧志口径不同。 */
 export const RULES = {
   zh: [
     ['一', '无来源不入库', '每条条目引用的来源都必须在来源层存在对应卡片，且 <code>rights</code> 字段填明授权状态。无来源的事实不进入已发布状态。'],
