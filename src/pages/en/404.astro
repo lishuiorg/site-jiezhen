@@ -1,5 +1,8 @@
 ---
-import NotFoundView from '../../views/NotFoundView.astro';
+import NotFoundView from 'lishui-kit/astro/views/NotFoundView.astro';
+import { ctxFor } from '../../site/context.mjs';
+
+const ctx = ctxFor('en');
 ---
 
-<NotFoundView lang="en" />
+<NotFoundView ctx={ctx} lang="en" />

@@ -1,7 +1,7 @@
 ---
 /* 关于页：内容范围、来源策略、已知缺口、许可、双语与主题、纠错、门禁、技术说明、当前规模。
    规模数字由构建时统计，不手工维护。 */
-import Base from '../layouts/Base.astro';
+import Base from 'lishui-kit/astro/layouts/Base.astro';
 import PageHead from 'lishui-kit/astro/PageHead.astro';
 import StatBar from 'lishui-kit/astro/StatBar.astro';
 import SectionHead from 'lishui-kit/astro/SectionHead.astro';
@@ -9,7 +9,7 @@ import { sectionPath } from 'lishui-kit/i18n/paths.mjs';
 import { forLang } from 'lishui-kit';
 import { ctxFor } from '../site/context.mjs';
 import { siteContent, statsOf, ofSection } from '../site/content.mjs';
-import { CATEGORIES, ARCHIVE, TYPE_DIRS } from '../site/config.mjs';
+import { CATEGORIES, ARCHIVE } from '../site/config.mjs';
 
 const { lang } = Astro.props;
 const ctx = ctxFor(lang);
@@ -32,7 +32,7 @@ const archiveRows = Object.entries(ARCHIVE[lang])
   .map(([key, label]) => [label, content.sourcesAll.filter((s) => s.archive === key).length])
   .filter(([, n]) => n > 0);
 
-const sectionRows = Object.keys(TYPE_DIRS).map((dir) => [
+const sectionRows = Object.keys(content.typeDirs).map((dir) => [
   ui.nav[dir], ofSection(content.entries, lang, dir).length,
 ]);
 
@@ -49,6 +49,7 @@ const tables = [
 ---
 
 <Base
+  ctx={ctx}
   lang={lang}
   path={sectionPath('about', lang)}
   title={a.title}

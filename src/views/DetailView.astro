@@ -1,7 +1,7 @@
 ---
 /* 详情页：条目正文、信息卡、目录、关联、来源。
    本站没有年份，标题下的元信息行改为单元类型、所属镇街、体裁与传统村落名录。 */
-import Base from '../layouts/Base.astro';
+import Base from 'lishui-kit/astro/layouts/Base.astro';
 import InfoCard from 'lishui-kit/astro/InfoCard.astro';
 import TocNav from 'lishui-kit/astro/TocNav.astro';
 import RelatedNav from 'lishui-kit/astro/RelatedNav.astro';
@@ -38,6 +38,7 @@ const schemaType = entry.type === 'place' ? 'Place' : entry.type === 'article' ?
 ---
 
 <Base
+  ctx={ctx}
   lang={lang}
   path={entry.path}
   title={entry.title}

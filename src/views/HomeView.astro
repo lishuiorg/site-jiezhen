@@ -1,7 +1,7 @@
 ---
 /* 首页：首屏、规模、六个类别、三个板块、最新更新、编纂凡例。
    本站没有时间轴，首页用两排类别网格代替。 */
-import Base from '../layouts/Base.astro';
+import Base from 'lishui-kit/astro/layouts/Base.astro';
 import Hero from 'lishui-kit/astro/Hero.astro';
 import StatBar from 'lishui-kit/astro/StatBar.astro';
 import SectionHead from 'lishui-kit/astro/SectionHead.astro';
@@ -14,7 +14,7 @@ import { ctxFor } from '../site/context.mjs';
 import {
   siteContent, statsOf, ofCategory, ofSection, byUpdated,
 } from '../site/content.mjs';
-import { CATEGORIES, SECTIONS, RULES, TYPE_DIRS } from '../site/config.mjs';
+import { CATEGORIES, SECTIONS, RULES } from '../site/config.mjs';
 
 const { lang } = Astro.props;
 const ctx = ctxFor(lang);
@@ -48,7 +48,7 @@ const catItems = CATEGORIES.map((cat) => {
 
 /* 板块卡：三个板块各给图标、说明与条目数。 */
 const BOARD_GLYPH = { towns: 'm9', villages: 'm8', articles: 'm7' };
-const boardItems = Object.keys(TYPE_DIRS).map((dir) => {
+const boardItems = Object.keys(content.typeDirs).map((dir) => {
   const entries = ofSection(content.entries, lang, dir);
   const text = SECTIONS[dir][lang];
   return {
@@ -68,6 +68,7 @@ const rules = RULES[lang].map(([no, title, text]) => ({ no, title, text }));
 ---
 
 <Base
+  ctx={ctx}
   lang={lang}
   path={homePath}
   title={ui.hero.title}
