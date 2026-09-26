@@ -37,6 +37,16 @@ jobs:
           repository: lishuiorg/lishui-towns
           path: lishui-towns
 
+      # 站群清单由门户持有，取它生成跨站统一导航，本站不硬编码兄弟站点。
+      # 只要 sites.json 一个文件，不必把整个门户检出到构建目录里。
+      - name: 检出站群清单
+        uses: actions/checkout@v4
+        with:
+          repository: lishuiorg/site-portal
+          path: site-portal
+          sparse-checkout: sites.json
+          sparse-checkout-cone-mode: false
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
