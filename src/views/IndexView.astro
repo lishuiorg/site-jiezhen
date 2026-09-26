@@ -1,66 +1,9 @@
 ---
-/* 索引页：全部条目按类别分组总览，供「有没有写」的快速核对。
-   本站按类别分组，列出单元类型、所属镇街与传统村落三列，不分期、不分页。 */
-import Base from 'lishui-kit/astro/layouts/Base.astro';
-import PageHead from 'lishui-kit/astro/PageHead.astro';
-import FilterForm from 'lishui-kit/astro/FilterForm.astro';
-import IndexTable from 'lishui-kit/astro/IndexTable.astro';
-import { sectionPath } from 'lishui-kit/i18n/paths.mjs';
-import { forLang } from 'lishui-kit';
-import { ctxFor } from '../site/context.mjs';
-import { siteContent, byTitle } from '../site/content.mjs';
-import { CATEGORIES } from '../site/config.mjs';
+/* 索引页：模板取自底座，本站按类别分组、列出单元类型与所属镇街等列，见 site/model.mjs。 */
+import IndexView from 'lishui-kit/astro/views/IndexView.astro';
+import { indexModel } from '../site/model.mjs';
 
 const { lang } = Astro.props;
-const ctx = ctxFor(lang);
-const content = siteContent();
-const { ui } = ctx;
-
-const list = forLang(content.entries, lang).sort(byTitle);
-const cats = CATEGORIES.filter((c) => list.some((e) => e.category === c.key));
-
-const groups = [
-  ...cats.map((cat) => ({
-    key: cat.key,
-    name: ctx.catName(cat),
-    range: '',
-    items: [],
-  })),
-  { key: 'none', name: ui.list.filterAll, range: '', items: [] },
-];
-for (const entry of list) {
-  const group = groups.find((g) => g.key === entry.category) || groups[groups.length - 1];
-  group.items.push(entry);
-}
-
-const filterGroups = cats.length > 0 ? [{
-  key: 'category',
-  label: ui.list.filterCategory,
-  options: cats.map((c) => ({ value: c.key, label: ctx.catName(c) })),
-}] : [];
-
-const columns = ['entry', 'unittype', 'parent', 'village', 'depth'];
 ---
 
-<Base
-  ctx={ctx}
-  lang={lang}
-  path={sectionPath('index', lang)}
-  title={ui.indexPage.title}
-  description={ui.indexPage.lede}
-  active="index"
->
-  <PageHead
-    eyebrow={ui.nav.index}
-    title={ui.indexPage.title}
-    lede={ui.indexPage.lede}
-    meta={[{ label: ui.stats.entries, value: list.length }]}
-  />
-
-  <section class="section">
-    <div class="wrap">
-      {filterGroups.length > 0 && <FilterForm ui={ui} groups={filterGroups} />}
-      <IndexTable groups={groups} ctx={ctx} columns={columns} />
-    </div>
-  </section>
-</Base>
+<IndexView {...indexModel(lang)} />
