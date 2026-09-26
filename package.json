@@ -1,0 +1,25 @@
+{
+  "name": "site-jiezhen",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "溧水街镇站点库。用 Astro 读取 lishui-towns 内容库，生成静态站点，部署到 jiezhen.lishui.org。",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "validate": "node ../lishui-towns/scripts/validate.mjs",
+    "check-links": "node scripts/check-links.mjs",
+    "check-pages": "node scripts/check-pages.mjs",
+    "check": "npm run validate && npm run build && npm run check-links && npm run check-pages"
+  },
+  "dependencies": {
+    "lishui-kit": "file:../lishui-kit"
+  },
+  "devDependencies": {
+    "astro": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

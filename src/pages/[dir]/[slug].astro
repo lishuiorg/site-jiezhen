@@ -1,0 +1,17 @@
+---
+/* 条目详情：中文在根路径，英文在 /en/ 下，路径由内容库的目录名与 id 尾段决定。 */
+import DetailView from '../../views/DetailView.astro';
+import { siteContent } from '../../site/content.mjs';
+import { forLang } from 'lishui-kit';
+
+export function getStaticPaths() {
+  return forLang(siteContent().entries, 'zh').map((entry) => ({
+    params: { dir: entry.dirName, slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+---
+
+<DetailView lang="zh" entry={entry} />

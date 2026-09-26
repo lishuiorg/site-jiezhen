@@ -1,0 +1,95 @@
+name: 构建并发布
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # 站点库以 file:../lishui-kit 引入底座，构建时又要读 ../lishui-towns，
+      # 所以三个库都要检出，并保持同级目录关系。
+      - name: 检出站点库
+        uses: actions/checkout@v4
+        with:
+          path: site-jiezhen
+
+      - name: 检出共享底座
+        uses: actions/checkout@v4
+        with:
+          repository: lishuiorg/lishui-kit
+          path: lishui-kit
+
+      - name: 检出内容库
+        uses: actions/checkout@v4
+        with:
+          repository: lishuiorg/lishui-towns
+          path: lishui-towns
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: |
+            site-jiezhen/package-lock.json
+            lishui-kit/package-lock.json
+            lishui-towns/package-lock.json
+
+      # 底座自己的依赖也要装：它以 file: 链接进 node_modules，
+      # 而 Node 按链接的真实路径解析依赖，找不到就得往底座目录里找。
+      - name: 安装底座依赖
+        working-directory: lishui-kit
+        run: npm ci
+
+      - name: 安装依赖
+        working-directory: site-jiezhen
+        run: npm ci
+
+      # 内容库的校验脚本要能解析到 lishui-kit，所以它也得装一次依赖。
+      - name: 安装内容库依赖
+        working-directory: lishui-towns
+        run: npm ci
+
+      # 内容不过校验就不发布：这一步挡住的是「内容出错」，不是「代码出错」。
+      - name: 内容校验
+        working-directory: site-jiezhen
+        run: npm run validate
+
+      - name: 构建
+        working-directory: site-jiezhen
+        run: npm run build
+
+      - name: 站内链接自检
+        working-directory: site-jiezhen
+        run: npm run check-links
+
+      - name: 页面自检
+        working-directory: site-jiezhen
+        run: npm run check-pages
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site-jiezhen/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

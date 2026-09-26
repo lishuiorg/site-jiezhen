@@ -1,0 +1,29 @@
+---
+/* 页面外壳：把站点常量、界面串、主导航交给 kit 的 Layout，页面只管正文。
+   语言、当前路径、标题、描述、当前板块、是否显示阅读进度、结构化数据都从这里过。 */
+import Layout from 'lishui-kit/astro/Layout.astro';
+import { ctxFor } from '../site/context.mjs';
+
+const {
+  lang, path, title, description,
+  active = '', progress = false, noindex = false, jsonLd = null,
+} = Astro.props;
+
+const ctx = ctxFor(lang);
+---
+
+<Layout
+  site={ctx.site}
+  lang={lang}
+  ui={ctx.ui}
+  path={path}
+  title={title}
+  description={description}
+  active={active}
+  nav={ctx.nav}
+  progress={progress}
+  noindex={noindex}
+  jsonLd={jsonLd}
+>
+  <slot />
+</Layout>
