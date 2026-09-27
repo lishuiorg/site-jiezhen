@@ -1,6 +1,6 @@
 # site-jiezhen · 溧水街镇站点库
 
-溧水一方「溧水街镇」分站的站点库。内容在 `lishui-towns`，共享底座在 `lishui-kit`，本站只写街镇分站特有的部分。
+溧水一方「溧水街镇」分站的站点库。内容在统一内容库 `lishui` 的 `content/lishui-towns/` 子树，共享底座在 `lishui-kit`，本站只写街镇分站特有的部分。
 
 - 域名：`jiezhen.lishui.org`（中文在根路径，英文在 `/en/` 下）
 - 生成器：Astro 5（静态输出，产物是纯 HTML）
@@ -10,11 +10,11 @@
 
 | 库 | 放什么 | 本站怎么用 |
 | --- | --- | --- |
-| `lishui-towns` | 内容：来源层与成果层的 Markdown | 构建时读取，一条都不复制进本站 |
+| `lishui` | 统一内容库：来源层与成果层的 Markdown，本站占 `content/lishui-towns/` 子树 | 构建时读取，一条都不复制进本站 |
 | `lishui-kit` | 设计系统、知识组件、多语言、校验引擎 | 以 `file:../lishui-kit` 依赖引入，不重写 |
 | `site-jiezhen` | 本站的页面、站点常量、类别与板块规则 | 本库 |
 
-内容库位置按 `LISHUI_CONTENT_DIR` → 本站 `content/` 子模块 → 同级目录 `../lishui-towns` 依次查找。
+内容库位置按 `LISHUI_CONTENT_DIR` → 本站 `content/` 目录 → 同级目录 `../lishui` 依次查找。
 
 ## 目录
 
